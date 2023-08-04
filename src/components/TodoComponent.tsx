@@ -2,39 +2,19 @@ import React, { useState } from 'react'
 import { ToDo } from './Todo'
 import Clipboard from '@/assets/todo-icon.svg'
 import Image from 'next/image'
+import { useTodosContext } from '@/context/Todo'
+import { twMerge } from 'tailwind-merge'
 
-interface ToDoComponentProps {
-  toDoList: string[]
-  setToDoList: (text: string[]) => void
-}
+export function TodoComponent() {
+  const { todos } = useTodosContext()
 
-export function TodoComponent({ toDoList, setToDoList }: ToDoComponentProps) {
-  const [completeCount, setCompleteCount] = useState(0)
-
-  const handleDeleteToDo = (deletedToDo: string) => {
-    const updateToDo = toDoList.filter((toDo: string) => toDo !== deletedToDo)
-    setToDoList(updateToDo)
-  }
-
-  const handleTasksCompleted = (isComplete: boolean) => {
-    if (!isComplete) {
-      if (toDoList.length < completeCount) {
-        setCompleteCount(Number(toDoList.length))
-        return
-      }
-      setCompleteCount((count) => {
-        return count + 1
-      })
-      return
+  const tasksCompleted = todos.reduce((total, task) => {
+    if (task.isCompleted) {
+      total++
     }
 
-    setCompleteCount((count) => {
-      if (count > 0) {
-        return count - 1
-      }
-      return 0
-    })
-  }
+    return total
+  }, 0)
 
   return (
     <div
@@ -52,36 +32,42 @@ export function TodoComponent({ toDoList, setToDoList }: ToDoComponentProps) {
               sm:inline block text-center
             "
           >
-            {toDoList.length}
+            {todos.length}
           </span>
         </h1>
         <h1 className="text-secondary font-bold text-sm">
           Completed{' '}
           <span
-            className="
-              bg-dark-400 text-gray-200 rounded-full px-2 py-1
-              sm:inline block text-center
-            "
+            className={twMerge(
+              'bg-dark-400 text-gray-200 rounded-full px-2 py-1 sm:inline block text-center',
+              tasksCompleted === todos.length &&
+                todos.length > 0 &&
+                'text-green-400',
+            )}
           >
-            {completeCount} de {toDoList.length}
+            {tasksCompleted} - {todos.length}
           </span>
         </h1>
       </div>
 
-      {toDoList.length ? (
-        <div className="w-full flex flex-col justify-center items-center rounded-md">
-          {toDoList.map((description) => (
-            <ToDo
-              key={description}
-              description={description}
-              handleTasksCompleted={handleTasksCompleted}
-              handleDeleteToDo={handleDeleteToDo}
-            />
+      {todos.length ? (
+        <div
+          data-testid="todo-item"
+          className="w-full flex flex-col justify-center items-center rounded-md"
+        >
+          {todos.map((todo) => (
+            <ToDo key={todo.description} todo={todo} />
           ))}
         </div>
       ) : (
         <div className="w-full flex flex-col justify-center items-center border-t border-gray-300 rounded-md p-8">
-          <Image src={Clipboard} alt="clipboard" className="mb-4" />
+          <Image
+            src={Clipboard}
+            alt="clipboard"
+            width={56}
+            height={56}
+            className="mb-4"
+          />
           <strong className="text-center text-gray-300 text-base leading-140%">
             You don't have tasks registered yet
           </strong>

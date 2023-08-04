@@ -3,9 +3,11 @@
 import { useState, FormEvent } from 'react'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import { TodoComponent } from './TodoComponent'
+import { useTodosContext } from '@/context/Todo'
 
 export function Form() {
-  const [toDoList, setToDoList] = useState<string[]>([])
+  const { handleAddTodo } = useTodosContext()
+
   const [inputText, setInputText] = useState('')
 
   const disableButton = !inputText.length
@@ -15,8 +17,11 @@ export function Form() {
     text: string,
   ) => {
     event.preventDefault()
-    setToDoList([...toDoList, text])
-    setInputText('')
+    handleAddTodo({
+      description: text,
+      isCompleted: false,
+      subtasks: [],
+    })
   }
 
   return (
@@ -27,8 +32,9 @@ export function Form() {
           onSubmit={(event) => handleCreateNewToDo(event, inputText)}
         >
           <input
+            data-testid="input-todo"
             type="text"
-            placeholder="Add a new task"
+            placeholder="Describe your task"
             value={inputText}
             required
             onChange={(e) => setInputText(e.target.value)}
@@ -39,18 +45,20 @@ export function Form() {
             "
           />
           <button
+            data-testid="submit-todo"
+            type="submit"
             disabled={disableButton}
             className="
               flex items-center gap-2 text-gray-100 bg-primary p-4 rounded
               font-semibold text-xs border-none cursor-pointer transition
-              duration-200 hover:bg-blue-500
+              duration-200 hover:bg-blue-500 disabled:opacity-90 disabled:cursor-not-allowed
             "
           >
             Add <IoMdAddCircleOutline size={19} />
           </button>
         </form>
       </div>
-      <TodoComponent toDoList={toDoList} setToDoList={setToDoList} />
+      <TodoComponent />
     </>
   )
 }
