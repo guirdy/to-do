@@ -86,10 +86,7 @@ export function ToDo({ todo }: ToDoProps) {
 
       <div className="w-full max-w-3xl border-l-2 border-blue-500 mb-12 pl-2">
         {!!todo.subtasks.length && (
-          <div
-            data-testid="todo-item"
-            className="w-full flex flex-col justify-center items-center rounded-md"
-          >
+          <div className="w-full flex flex-col justify-center items-center rounded-md">
             {todo.subtasks.map((subtask) => (
               <SubTask key={subtask.description} subtask={subtask} />
             ))}
@@ -101,6 +98,7 @@ export function ToDo({ todo }: ToDoProps) {
           onSubmit={(e) => handleCreateNewSubTask(e, inputText)}
         >
           <input
+            data-testid="input-subtask"
             type="text"
             placeholder="Add a subtask for this todo"
             value={inputText}
@@ -113,6 +111,8 @@ export function ToDo({ todo }: ToDoProps) {
           "
           />
           <button
+            data-testid="add-subtask"
+            type="submit"
             disabled={disableButton}
             className="
             flex items-center gap-2 text-gray-100

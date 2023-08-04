@@ -21,12 +21,15 @@ export function SubTask({ subtask }: ToDoProps) {
 
   return (
     <>
-      <div className="w-full flex justify-between mb-4">
+      <div
+        data-testid="subtask-item"
+        className="w-full flex justify-between mb-4"
+      >
         <button
           data-testid="subtask-button"
           className={`flex justify-between items-center w-full bg-dark-400 ${
             subtask.isCompleted ? 'text-gray-300' : 'text-gray-100'
-          } py-1 px-6 border-none rounded-l-md ${
+          } py-2 px-6 border-none rounded-l-md ${
             subtask.isCompleted ? 'border-r-0' : 'border-r border-dark-500'
           }`}
           // onClick={handleSelected}
@@ -36,11 +39,13 @@ export function SubTask({ subtask }: ToDoProps) {
             className="flex items-center gap-3"
           >
             {subtask.isCompleted ? (
-              <AiFillCheckCircle className="text-white-200" />
+              <AiFillCheckCircle className="text-white-200 w-3" />
             ) : (
-              <BsCircle className="text-white-200" />
+              <BsCircle className="text-white-200 w-3" />
             )}
-            <span className={subtask.isCompleted ? 'line-through' : ''}>
+            <span
+              className={`text-sm ${subtask.isCompleted ? 'line-through' : ''}`}
+            >
               {subtask.description}
             </span>
           </div>
