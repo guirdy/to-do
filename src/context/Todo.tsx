@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  addSubtaskForTodoAction,
   addTodoAction,
   deleteTodoAction,
   selectTodoAction,
@@ -28,6 +29,7 @@ interface TodosContextTypes {
   handleAddTodo: (task: Task) => void
   handleRemoveTodo: (task: Task) => void
   handleSelectTodo: (task: Task) => void
+  handleAddSubtaskForTodo: (task: Task, subtask: Subtask) => void
 }
 
 const Todos = createContext({} as TodosContextTypes)
@@ -47,6 +49,10 @@ const TodoProvider = ({ children }: ContextProps) => {
     dispatch(selectTodoAction(task))
   }
 
+  function handleAddSubtaskForTodo(task: Task, subtask: Subtask) {
+    dispatch(addSubtaskForTodoAction(task, subtask))
+  }
+
   return (
     <Todos.Provider
       value={{
@@ -54,6 +60,7 @@ const TodoProvider = ({ children }: ContextProps) => {
         handleAddTodo,
         handleRemoveTodo,
         handleSelectTodo,
+        handleAddSubtaskForTodo,
       }}
     >
       {children}
@@ -62,9 +69,20 @@ const TodoProvider = ({ children }: ContextProps) => {
 }
 
 const useTodosContext = () => {
-  const { todos, handleAddTodo, handleRemoveTodo, handleSelectTodo } =
-    useContext(Todos)
-  return { todos, handleAddTodo, handleRemoveTodo, handleSelectTodo }
+  const {
+    todos,
+    handleAddTodo,
+    handleRemoveTodo,
+    handleSelectTodo,
+    handleAddSubtaskForTodo,
+  } = useContext(Todos)
+  return {
+    todos,
+    handleAddTodo,
+    handleRemoveTodo,
+    handleSelectTodo,
+    handleAddSubtaskForTodo,
+  }
 }
 
 export { TodoProvider, useTodosContext }

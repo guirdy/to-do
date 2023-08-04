@@ -1,4 +1,4 @@
-import { Task } from '@/context/Todo'
+import { Subtask, Task } from '@/context/Todo'
 
 export enum ActionTypes {
   ADD_TODO = 'ADD_TODO',
@@ -18,11 +18,12 @@ export function addTodoAction(todo: Task) {
   }
 }
 
-export function addSubtaskForTodoAction(todo: Task) {
+export function addSubtaskForTodoAction(todo: Task, subtask: Subtask) {
   return {
     type: ActionTypes.ADD_SUBTASK_TO_TODO,
     payload: {
       todo,
+      subtask,
     },
   }
 }

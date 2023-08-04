@@ -22,6 +22,7 @@ export function Form() {
       isCompleted: false,
       subtasks: [],
     })
+    setInputText('')
   }
 
   return (
