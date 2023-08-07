@@ -1,6 +1,7 @@
 import { Task } from '@/context/Todo'
 import { Action, ActionTypes } from './actions'
 import { produce } from 'immer'
+import { toast } from 'react-toastify'
 
 export function todosReducer(state: Task[], action: Action) {
   switch (action.type) {
@@ -11,11 +12,12 @@ export function todosReducer(state: Task[], action: Action) {
         })
 
         if (indexDraft > -1) {
-          alert('To-do already exists.')
+          toast.error('To-do already exists.')
           return
         }
 
         draft.push(action.payload.todo)
+        toast.success('To-do created successfully.')
       })
 
     case ActionTypes.DELETE_TODO:
@@ -26,6 +28,7 @@ export function todosReducer(state: Task[], action: Action) {
 
         if (indexDraft > -1) {
           draft.splice(indexDraft, 1)
+          toast.success('To-do deleted successfully.')
         }
       })
 
@@ -74,11 +77,12 @@ export function todosReducer(state: Task[], action: Action) {
           )
 
           if (indexSubtask > -1) {
-            alert('This subtask already exists for this todo')
+            toast.error('This subtask already exists for this todo')
             return
           }
 
           draft[indexDraft].subtasks.push(action.payload.subtask)
+          toast.success('Subtask created successfully.')
         }
       })
 
@@ -97,12 +101,11 @@ export function todosReducer(state: Task[], action: Action) {
 
           if (indexSubtask > -1) {
             draft[indexDraft].subtasks.splice(indexSubtask, 1)
+            toast.success('Subtask deleted successfully.')
           }
         }
       })
 
-    case ActionTypes.CLEAR_TODOS:
-      return []
     default:
       return state
   }
