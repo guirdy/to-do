@@ -1,23 +1,23 @@
-import { useState } from 'react'
 import { BsCircle } from 'react-icons/bs'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Subtask, Task, useTodosContext } from '@/context/Todo'
 
 interface ToDoProps {
+  todo: Task
   subtask: Subtask
 }
 
-export function SubTask({ subtask }: ToDoProps) {
-  const { handleRemoveTodo, handleSelectTodo } = useTodosContext()
+export function SubTask({ todo, subtask }: ToDoProps) {
+  const { handleSelectSubtask, handleRemoveSubtask } = useTodosContext()
 
-  // const handleOnClickDelete = () => {
-  //   handleRemoveTodo(todo)
-  // }
+  const handleOnClickDelete = () => {
+    handleRemoveSubtask(todo, subtask)
+  }
 
-  // const handleSelected = () => {
-  //   handleSelectTodo(todo)
-  // }
+  const handleSelected = () => {
+    handleSelectSubtask(todo, subtask)
+  }
 
   return (
     <>
@@ -32,7 +32,7 @@ export function SubTask({ subtask }: ToDoProps) {
           } py-2 px-6 border-none rounded-l-md ${
             subtask.isCompleted ? 'border-r-0' : 'border-r border-dark-500'
           }`}
-          // onClick={handleSelected}
+          onClick={handleSelected}
         >
           <div
             data-testid={`selected-subtask-${subtask.isCompleted}`}
@@ -58,7 +58,7 @@ export function SubTask({ subtask }: ToDoProps) {
             p-1 transition-colors duration-200 hover:bg-dark-900
             rounded-r-md px-4 h-full bg-dark-400
           "
-            // onClick={handleOnClickDelete}
+            onClick={handleOnClickDelete}
           >
             <HiOutlineTrash className="text-gray-300" />
           </button>

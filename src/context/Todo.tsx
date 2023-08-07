@@ -3,7 +3,9 @@
 import {
   addSubtaskForTodoAction,
   addTodoAction,
+  deleteSubtaskAction,
   deleteTodoAction,
+  selectSubtaskAction,
   selectTodoAction,
 } from '@/reducers/actions'
 import { todosReducer } from '@/reducers/reducer'
@@ -29,6 +31,8 @@ interface TodosContextTypes {
   handleAddTodo: (task: Task) => void
   handleRemoveTodo: (task: Task) => void
   handleSelectTodo: (task: Task) => void
+  handleSelectSubtask: (task: Task, subtask: Subtask) => void
+  handleRemoveSubtask: (task: Task, subtask: Subtask) => void
   handleAddSubtaskForTodo: (task: Task, subtask: Subtask) => void
 }
 
@@ -49,6 +53,14 @@ const TodoProvider = ({ children }: ContextProps) => {
     dispatch(selectTodoAction(task))
   }
 
+  function handleSelectSubtask(task: Task, subtask: Subtask) {
+    dispatch(selectSubtaskAction(task, subtask))
+  }
+
+  function handleRemoveSubtask(task: Task, subtask: Subtask) {
+    dispatch(deleteSubtaskAction(task, subtask))
+  }
+
   function handleAddSubtaskForTodo(task: Task, subtask: Subtask) {
     dispatch(addSubtaskForTodoAction(task, subtask))
   }
@@ -60,6 +72,8 @@ const TodoProvider = ({ children }: ContextProps) => {
         handleAddTodo,
         handleRemoveTodo,
         handleSelectTodo,
+        handleSelectSubtask,
+        handleRemoveSubtask,
         handleAddSubtaskForTodo,
       }}
     >
@@ -74,6 +88,8 @@ const useTodosContext = () => {
     handleAddTodo,
     handleRemoveTodo,
     handleSelectTodo,
+    handleSelectSubtask,
+    handleRemoveSubtask,
     handleAddSubtaskForTodo,
   } = useContext(Todos)
   return {
@@ -81,6 +97,8 @@ const useTodosContext = () => {
     handleAddTodo,
     handleRemoveTodo,
     handleSelectTodo,
+    handleSelectSubtask,
+    handleRemoveSubtask,
     handleAddSubtaskForTodo,
   }
 }

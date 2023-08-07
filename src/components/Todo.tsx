@@ -88,7 +88,11 @@ export function ToDo({ todo }: ToDoProps) {
         {!!todo.subtasks.length && (
           <div className="w-full flex flex-col justify-center items-center rounded-md">
             {todo.subtasks.map((subtask) => (
-              <SubTask key={subtask.description} subtask={subtask} />
+              <SubTask
+                key={subtask.description}
+                todo={todo}
+                subtask={subtask}
+              />
             ))}
           </div>
         )}

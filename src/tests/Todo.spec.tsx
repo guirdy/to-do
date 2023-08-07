@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  fireEvent,
-  getAllByText,
-  render,
-  waitFor,
-} from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { TodoProvider } from '../context/Todo'
 import { Form } from '@/components/Form'
 import { TodoComponent } from '@/components/TodoComponent'
@@ -127,5 +122,100 @@ describe('Todo Form', () => {
 
     expect(subTask).toBeInTheDocument()
     expect(getAllByText('New Subtask Added')[0]).toBeInTheDocument()
+  })
+
+  it('should select and unselect a subtask', async () => {
+    const { getByText, getByTestId, getAllByTestId, getAllByText } = render(
+      <TodoProvider>
+        <Form />
+        <TodoComponent />
+      </TodoProvider>,
+    )
+
+    const input = getByTestId('input-todo')
+
+    await waitFor(() =>
+      fireEvent.change(input, { target: { value: 'Hello World' } }),
+    )
+
+    await waitFor(() => fireEvent.click(getByText('Add')))
+
+    const todo = getAllByTestId('todo-item')[0]
+
+    expect(todo).toBeInTheDocument()
+
+    const subTaskInput = getAllByTestId('input-subtask')[0]
+
+    await waitFor(() =>
+      fireEvent.change(subTaskInput, {
+        target: { value: 'New Subtask Added' },
+      }),
+    )
+
+    await waitFor(() => fireEvent.click(getAllByTestId('add-subtask')[0]))
+
+    const subTask = getAllByTestId('subtask-item')[0]
+
+    expect(subTask).toBeInTheDocument()
+    expect(getAllByText('New Subtask Added')[0]).toBeInTheDocument()
+
+    const subtaskButton = getAllByTestId('subtask-button')[0]
+
+    await waitFor(() => fireEvent.click(subtaskButton))
+
+    expect(getAllByTestId('selected-subtask-true')[0]).toBeInTheDocument()
+
+    await waitFor(() => fireEvent.click(subtaskButton))
+
+    expect(getAllByTestId('selected-subtask-false')[0]).toBeInTheDocument()
+  })
+
+  it('should remove a subtask', async () => {
+    const {
+      getByText,
+      getByTestId,
+      getAllByTestId,
+      getAllByText,
+      queryByText,
+    } = render(
+      <TodoProvider>
+        <Form />
+        <TodoComponent />
+      </TodoProvider>,
+    )
+
+    const input = getByTestId('input-todo')
+
+    await waitFor(() =>
+      fireEvent.change(input, { target: { value: 'Hello World' } }),
+    )
+
+    await waitFor(() => fireEvent.click(getByText('Add')))
+
+    const todo = getAllByTestId('todo-item')[0]
+
+    expect(todo).toBeInTheDocument()
+
+    const subTaskInput = getAllByTestId('input-subtask')[0]
+
+    await waitFor(() =>
+      fireEvent.change(subTaskInput, {
+        target: { value: 'New Subtask Added' },
+      }),
+    )
+
+    await waitFor(() => fireEvent.click(getAllByTestId('add-subtask')[0]))
+
+    const subTask = getAllByTestId('subtask-item')[0]
+
+    expect(subTask).toBeInTheDocument()
+    expect(getAllByText('New Subtask Added')[0]).toBeInTheDocument()
+
+    const deleteSubtaskButton = getAllByTestId('remove-subtask')[0]
+
+    await waitFor(() => fireEvent.click(deleteSubtaskButton))
+
+    const subTaskText = queryByText('New Subtask Added')
+    expect(subTaskText).toBeNull()
   })
 })

@@ -6,7 +6,14 @@ export enum ActionTypes {
   REMOVE_SUBTASK_TO_TODO = 'REMOVE_SUBTASK_TO_TODO',
   DELETE_TODO = 'DELETE_TODO',
   SELECT_TODO = 'SELECT_TODO',
+  SELECT_SUBTASK = 'SELECT_SUBTASK',
+  DELETE_SUBTASK = 'DELETE_SUBTASK',
   CLEAR_TODOS = 'CLEAR_TODOS',
+}
+
+export interface Action {
+  type: keyof typeof ActionTypes
+  payload: any
 }
 
 export function addTodoAction(todo: Task) {
@@ -51,6 +58,26 @@ export function selectTodoAction(todo: Task) {
     type: ActionTypes.SELECT_TODO,
     payload: {
       todo,
+    },
+  }
+}
+
+export function selectSubtaskAction(todo: Task, subtask: Subtask) {
+  return {
+    type: ActionTypes.SELECT_SUBTASK,
+    payload: {
+      todo,
+      subtask,
+    },
+  }
+}
+
+export function deleteSubtaskAction(todo: Task, subtask: Subtask) {
+  return {
+    type: ActionTypes.DELETE_SUBTASK,
+    payload: {
+      todo,
+      subtask,
     },
   }
 }
